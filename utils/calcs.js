@@ -39,10 +39,11 @@
 		}
 	}
 	lib.getAUniqueNumber = function(){
-		return Date.now(); //use date as a unique number
+		return Date.now() + Math.floor(Math.random() * 10000);//use date as a unique number
 	}
 	lib.getAUniqueKeyString = function(){
-		return "UK" + Date.now(); //use date as a unique number
+		let randomNbr = Date.now() + Math.floor(Math.random() * 10000);
+		return "UK" + randomNbr  ; //use date as a unique number
 	}
 	lib.getPercent = function(lastVal, currentVal){
 		if(lastVal == 0 ||lastVal === undefined || currentVal === undefined){

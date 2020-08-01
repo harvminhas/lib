@@ -1,6 +1,6 @@
 let datetime = require('../utils/datetime');
 let Asset = require('./asset');
-
+let Adaptor = require('./adaptor');
 class AssetsSingleton {
     constructor () {
         if (!AssetsSingleton.instance) {
@@ -29,8 +29,20 @@ class AssetsSingleton {
                 obj.assignEntry(entry);
             }
         })
-
     }
+
+/*    loadFromForm(formJson, userid){
+        this.assets = [];
+        let self = this;
+        let adaptor = new Adaptor();
+        formJson.assets.forEach(function(asset){
+            let assetObj = new Asset();
+            let assetJson = adaptor.formToModel(formJson, userid);
+            // assetObj.load(assetJson.asset)
+            this.load()
+        })
+    };*/
+
     addAsset(){
         // To be implemented
     }
