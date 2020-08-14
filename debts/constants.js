@@ -5,8 +5,8 @@
     lib.version = '0.1';
 
     lib.DEBT_ALL = 'all';
-    lib.DEBT_CREDIT_CARDS_TYPE = 'creditcard';
-    lib.DEBT_MORTGAGES_TYPE = 'mortgage';
+    lib.DEBT_CREDIT_CARDS_TYPE = 'creditcards';
+    lib.DEBT_MORTGAGES_TYPE = 'mortgages';
 
 
     /*

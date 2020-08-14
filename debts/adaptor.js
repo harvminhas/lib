@@ -1,5 +1,6 @@
 let datetime = require('../utils/datetime');
 let calcs = require('../utils/calcs');
+let DebtHelper = require('./helper');
 class Adaptor {
     constructor() {    }
 
@@ -15,7 +16,9 @@ class Adaptor {
         return retObjs;
     }
     formToModel(formJson, type, userid){
-        //  console.log("Adaptor:formToModel input is : " + type + '/' + userid + "   " + JSON.stringify(formJson));
+        let helper = new DebtHelper();
+
+          console.log("Adaptor:formToModel input is : " + type + '/' + userid + "   " + JSON.stringify(formJson));
         let model = {};
         model.debt = {};
         model.debt.created_on = datetime.getCurrentTS();
@@ -23,23 +26,35 @@ class Adaptor {
         model.debt.name = formJson.name;
         model.debt.status = 'active';
         model.debt.type = type;
-        model.debt.updated_on = model.asset.created_on;
+        model.debt.updated_on = model.debt.created_on;
         model.debt.userid = userid;
-        model.debt.value = formJson.value;
+        model.debt.balance = formJson.balance;
 
-        model.debt.estRate = [{
+
+        /*model.debt.estRate = [{
             rate: 5,
             ts: datetime.getCurrentTS()
-        }]
+        }]*/
 
         model.entry = {};
         model.entry.id = calcs.getAUniqueKeyString();
         model.entry.type = type;
         model.entry.active = true;
         model.entry.debtid = model.debt.id;
-        model.entry.ts = model.asset.created_on;
+        model.entry.ts = model.debt.created_on;
         model.entry.userid = userid;
-        model.entry.value = formJson.value;
+        model.entry.balance = formJson.balance;
+        model.entry.rate = formJson.rate;
+
+        if(!formJson.pymtAmt){
+            model.entry.pymtAmt = parseInt(model.debt.balance) * 0.02;
+        }else{
+            model.entry.pymtAmt = formJson.pymtAmt;
+        }
+
+        let payoffInfo = helper.calculatePayoff(model.entry);
+        model.entry.interestToPay = payoffInfo.interestTillPayoff;
+        model.entry.payoffDt = payoffInfo.payoffDate;
 
         model.debt.latestEntry = model.entry;
 

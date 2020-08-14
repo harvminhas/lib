@@ -1,6 +1,7 @@
 let Debt = require('./debt');
 let DebtConstant = require('./constants');
 let datetime = require('../utils/datetime');
+let finance = require('../utils/finance');
 class DebtsHelperSingleton {
     constructor () {
         if (!DebtsHelperSingleton.instance) {
@@ -73,7 +74,6 @@ class DebtsHelperSingleton {
         let retObj = {};
 
         let debtsToMatch = this.getDebts(debts, type);
-        console.log("DebtHelper:getPayoffsForType " + type + " / " + console.log(JSON.stringify(debtsToMatch)))
         debtsToMatch.sort(datetime.isDebtPayOffAfter);
 
         retObj.type = debtsToMatch[0].getType();
@@ -83,14 +83,26 @@ class DebtsHelperSingleton {
 
     }
     getPayoffDate(debts){
-            return this.getPayoffsForType(debts, DebtConstant.DEBT_ALL);
+        return this.getPayoffsForType(debts, DebtConstant.DEBT_ALL);
     }
 
 
 
     /****Calculations **/
+    calculatePayoff(debt){
+        console.log("helper:calculatePayoff " + JSON.stringify(debt));
+        let balance = parseFloat(debt.balance);
+        let rate = parseFloat(debt.rate);
+        let pymtAmt = parseFloat(debt.pymtAmt);
 
+        let nbrOfPymtsLeft = finance.calculateMonths(balance,rate, pymtAmt);
+        return {
+            payoffDate: datetime.addMonthsToToday(nbrOfPymtsLeft),
+            payoffMonths: nbrOfPymtsLeft,
+            interestTillPayoff: finance.calculateInterestPaid(balance, pymtAmt, nbrOfPymtsLeft, rate)
+        }
 
+    }
 }
 module.exports = DebtsHelperSingleton
 

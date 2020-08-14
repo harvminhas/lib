@@ -7,20 +7,15 @@ var moment = require('./moment');
     lib.version = '0.1';
 
 
-/*    lib.getObjectForDate = function(jsonArray, date){
-        const inputDt = moment(date, 'YYYY-MM-DD');
-        //Gives a value on the date provided.
-        let prevEntry = null //keep copy if needed to return;
-        jsonArray.forEach(function(entry){
-            let entryTs = moment(entry.ts, 'YYYY-MM-DD');
-            if(entryTs.isAfter(inputDt)){
-                return prevEntry;
-            }else {
-                prevEntry = entry;
-            }
-        })
-        return prevEntry; //if nothing found than return null
-    }*/
+    /*** USED **///
+
+    lib.addMonthsToToday = function(nbrOfMonths){
+        var today = moment();//
+        return today.add('months', nbrOfMonths).format("01-MM-YYYY");
+    }
+
+
+    /**** USED END **/
 
     lib.getObjectForDate = function(jsonArray, date){
         const inputDt = moment(date, 'YYYY-MM-DD');
